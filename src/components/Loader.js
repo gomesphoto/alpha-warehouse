@@ -19,15 +19,15 @@ const StyledLoader = styled.div`
   width: 8em;
   height: 8em;
   border-radius: 50%;
-  background: rgb(${colors.blue});
-  background: linear-gradient(to right, rgb(${colors.blue}) 10%, rgba(255, 255, 255, 0) 42%);
+  background: rgb(${colors.dark});
+  background: linear-gradient(to right, rgb(${colors.dark}) 10%, rgba(255, 255, 255, 0) 42%);
   animation: ${load} 1.4s infinite linear;
   transform: translateZ(0);
 
   &:before {
     width: 50%;
     height: 50%;
-    background: rgb(${colors.blue});
+    background: rgb(${colors.dark});
     border-radius: 100% 0 0 0;
     position: absolute;
     top: 0;

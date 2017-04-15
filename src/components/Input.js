@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { colors, transitions, fonts } from '../styles';
 
 const StyledContainer = styled.div`
-  border-bottom: 1px solid rgb(${colors.darkGrey});
+  border-bottom: 1px solid rgb(${colors.dark});
   position: relative;
   margin: 25px 0;
   transition: ${transitions.base};
@@ -16,7 +16,7 @@ const StyledContainer = styled.div`
     left: ${({ focus }) => focus ? '0%' : '50%'};
     width: ${({ focus }) => focus ? '100%' : 0};
     position: absolute;
-    background-color: rgb(${colors.blue});
+    background-color: rgb(${colors.dark});
     bottom: -1;
     will-change: width, left;
   }
@@ -48,7 +48,7 @@ const StyledLabel = styled.label`
   pointer-events: none;
   top: 0;
   left: 0;
-  color: rgb(${({ focus }) => focus ? colors.blue : colors.darkGrey});
+  color: rgb(${({ focus }) => focus ? colors.dark : colors.darkGrey});
   transition: ${transitions.base};
   transform-origin: left;
   transform: ${({ focus, content }) => (focus || content) ? 'translateY(-8px) scale(0.7)' : 'translateY(8px) scale(1)'};
@@ -62,7 +62,7 @@ const StyledInput = styled.input`
   border-style: none;
   box-sizing: border-box;
   border-radius: 2px;
-  margin: 5px 0;
+  margin: 6px 0;
   width: 100%;
   font-weight: 400;
   font-size: ${fonts.medium};

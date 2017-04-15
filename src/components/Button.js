@@ -7,9 +7,9 @@ const StyledButton = styled.button`
   border: none;
   border-style: none;
   box-sizing: border-box;
-  border: 1px solid rgb(${colors.blue});
-  background-color: ${({ line }) => line ? `rgb(${colors.white})` : `rgb(${colors.blue})`};
-  color: ${({ line }) => line ? `rgb(${colors.blue})` : `rgb(${colors.white})`};
+  border: 1px solid rgb(${colors.dark});
+  background-color: ${({ line }) => line ? `rgb(${colors.white})` : `rgb(${colors.dark})`};
+  color: ${({ line }) => line ? `rgb(${colors.dark})` : `rgb(${colors.white})`};
   font-size: ${fonts.medium};
   border-radius: 23px;
   font-weight: 500;

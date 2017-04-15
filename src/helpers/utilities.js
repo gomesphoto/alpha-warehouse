@@ -15,7 +15,7 @@ export const setSession = (
     expires,
     profile
   };
-  localStorage.setItem('BLEAN_SESSION', JSON.stringify(session));
+  localStorage.setItem('ALPHA_SESSION', JSON.stringify(session));
 };
 
 /**
@@ -23,7 +23,7 @@ export const setSession = (
  * @return {Object}
  */
 export const getSession = () => {
-  const session = localStorage.getItem('BLEAN_SESSION');
+  const session = localStorage.getItem('ALPHA_SESSION');
   return JSON.parse(session);
 };
 
@@ -34,7 +34,7 @@ export const getSession = () => {
  */
 export const updateProfile = (profile = []) => {
   const newSession = { ...getSession(), profile };
-  return localStorage.setItem('BLEAN_SESSION', JSON.stringify(newSession));
+  return localStorage.setItem('ALPHA_SESSION', JSON.stringify(newSession));
 };
 
 
@@ -43,7 +43,7 @@ export const updateProfile = (profile = []) => {
  * @return {Void}
  */
 export const deleteSession = () => {
-  localStorage.removeItem('BLEAN_SESSION');
+  localStorage.removeItem('ALPHA_SESSION');
 };
 
 /**
@@ -80,7 +80,7 @@ export const setOnboardingSession = (
   email = '',
   expires = Date.now(),
 ) => {
-  localStorage.setItem('BLEAN_ONBOARDING_SESSION', JSON.stringify({
+  localStorage.setItem('ALPHA_ONBOARDING_SESSION', JSON.stringify({
     email,
     expires,
   }));
@@ -91,7 +91,7 @@ export const setOnboardingSession = (
  * @return {Object}
  */
 export const getOnboardingSession = () => {
-  const onboardingSession = localStorage.getItem('BLEAN_ONBOARDING_SESSION');
+  const onboardingSession = localStorage.getItem('ALPHA_ONBOARDING_SESSION');
   return JSON.parse(onboardingSession);
 };
 
@@ -100,7 +100,7 @@ export const getOnboardingSession = () => {
  * @return {Void}
  */
 export const deleteOnboardingSession = () => {
-  localStorage.removeItem('BLEAN_ONBOARDING_SESSION');
+  localStorage.removeItem('ALPHA_ONBOARDING_SESSION');
 };
 
 /**
@@ -119,7 +119,7 @@ export const refreshSession = () => {
   };
 
   if (auth) {
-    localStorage.setItem('BLEAN_SESSION', getRefreshedSession(auth, 300000)); // 5 min
+    localStorage.setItem('ALPHA_SESSION', getRefreshedSession(auth, 300000)); // 5 min
     return refreshTimeout(240000); // 4 min
   }
 };

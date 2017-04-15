@@ -32,7 +32,7 @@ const Base = () => (
   <StyledWrapper>
     <Column>
       <StyledHeader to="/">
-        <StyledAppLogo src={logo} alt="Blean" />
+        <StyledAppLogo src={logo} alt="Alpha Warehouse" />
       </StyledHeader>
       <StyledContainer>
         <Switch>

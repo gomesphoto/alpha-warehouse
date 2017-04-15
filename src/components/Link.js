@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 const SLink = styled(Link)`
   text-decoration: none;
   color: inherit;
+  margin: 0;
+  padding: 0;
 `;
 
 const LinkWrapper = ({ children, ...otherProps }) => (

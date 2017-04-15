@@ -19,12 +19,8 @@ const StyledForm = styled(Form)`
   border-radius: 10px;
 `;
 
-const StyledHeader = styled(Link)`
-  padding: 10px;
-`;
-
 const StyledAppLogo = styled.img`
-  height: 70px;
+  width: 90%;
 `;
 
 class Login extends Component {
@@ -34,11 +30,10 @@ class Login extends Component {
   render() {
     return (
       <div>
-        <StyledHeader to="/">
+        <Link to="/">
           <StyledAppLogo src={logo} alt="Alpha Warehouse" />
-        </StyledHeader>
+        </Link>
         <Page fetching={this.props.fetching}>
-          <h4> {'To get started, login with your details below'} </h4>
           <StyledForm onSubmit={this.onSubmit}>
             <Input label="Email" type="email" onValueChange={value => this.props.authenticationUpdateEmail(value)} />
             <Input label="Password" type="password" onValueChange={value => this.props.authenticationUpdatePassword(value)} />

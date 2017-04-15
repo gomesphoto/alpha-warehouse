@@ -6,7 +6,7 @@ import { colors, transitions, fonts } from '../styles';
 const StyledContainer = styled.div`
   border-bottom: 1px solid rgb(${colors.dark});
   position: relative;
-  margin: 25px 0;
+  margin-bottom: 25px;
   transition: ${transitions.base};
 
   &::after {

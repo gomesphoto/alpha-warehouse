@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 const StyledForm = styled.form`
   width: 100%;
+  padding: 10px;
 `;
 
 class Form extends Component {

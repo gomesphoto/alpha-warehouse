@@ -61,12 +61,13 @@ export const globalStyles = `
 
   html, body, #root, #router-root {
     height: 100%;
+    width: 100%;
     margin: 0;
     padding: 0;
   }
 
   body {
-    background-color: rgb(${colors.lightGrey});
+    background: rgb(${colors.lightGrey});
     font-family: Roboto, sans-serif;
     font-weight: 300;
     font-size: ${fonts.medium};
@@ -96,8 +97,8 @@ export const globalStyles = `
     color: inherit;
   }
 
-  div {
-    box-sizing: border-box;
+  * {
+    box-sizing: border-box !important;
   }
 
   button {

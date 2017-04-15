@@ -1,4 +1,5 @@
-import { Component, PropTypes } from 'react';
+import { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { authenticationLogout } from '../redux/_authentication';
 import { deleteSession } from '../helpers/utilities';

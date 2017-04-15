@@ -15,12 +15,13 @@ export const authenticationLogin = (email, password) =>
   (dispatch) => {
     dispatch({ type: AUTHENTICATION_REQUEST });
     apiLogin(email, password)
-    .then(({ data: profilesData }) => {
+    .then((data) => {
+      console.log(data);
       setSession(
-        profilesData.email,
+        data.email,
         Date.now() + 300000, // 5 minutes
         Date.now() + 3000000, // 50 minutes
-        profilesData.profile,
+        data.profile,
       );
       dispatch({
         type: AUTHENTICATION_SUCCESS,

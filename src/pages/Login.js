@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Link from '../components/Link';
@@ -39,8 +40,8 @@ class Login extends Component {
         <Page fetching={this.props.fetching}>
           <h4> {'To get started, login with your details below'} </h4>
           <StyledForm onSubmit={this.onSubmit}>
-            <Input label="Email" type="email" onValueChange={value => this.props.loginUpdateEmail(value)} />
-            <Input label="Password" type="password" onValueChange={value => this.props.loginUpdatePassword(value)} />
+            <Input label="Email" type="email" onValueChange={value => this.props.authenticationUpdateEmail(value)} />
+            <Input label="Password" type="password" onValueChange={value => this.props.authenticationUpdatePassword(value)} />
             <Button type="submit" text="Login" fetching={this.props.fetching} />
           </StyledForm>
         </Page>
@@ -51,8 +52,8 @@ class Login extends Component {
 
 Login.propTypes = {
   authenticationLogin: PropTypes.func.isRequired,
-  loginUpdateEmail: PropTypes.func.isRequired,
-  loginUpdatePassword: PropTypes.func.isRequired,
+  authenticationUpdateEmail: PropTypes.func.isRequired,
+  authenticationUpdatePassword: PropTypes.func.isRequired,
   fetching: PropTypes.bool.isRequired,
   email: PropTypes.string.isRequired,
   password: PropTypes.string.isRequired

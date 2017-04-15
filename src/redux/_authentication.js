@@ -27,7 +27,7 @@ export const authenticationLogin = (email, password) =>
         type: AUTHENTICATION_SUCCESS,
         payload: getSession().profile
       });
-      window.browserHistory.transitionTo('/dashboard');
+      window.browserHistory.push('/dashboard');
     })
     .catch((error) => {
       dispatch({ type: AUTHENTICATION_FAILURE });
@@ -41,7 +41,7 @@ export const authenticationLogout = () =>
     .then(() => {
       deleteSession();
       dispatch({ type: AUTHENTICATION_SIGNOUT_SUCCESS });
-      window.browserHistory.transitionTo('/login');
+      window.browserHistory.push('/login');
       window.rogueDispatch({ type: 'RESET' });
     });
   };

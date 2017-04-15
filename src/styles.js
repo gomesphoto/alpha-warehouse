@@ -1,5 +1,3 @@
-import background from './assets/background.png';
-
 export const colors = {
   white: '255, 255, 255',
   black: '0, 0, 0',
@@ -68,11 +66,7 @@ export const globalStyles = `
   }
 
   body {
-    background-attachment: fixed;
-    background-position: center;
-    background-size: cover;
-    background-image: url(${background});
-    background-color: rgb(${colors.white});
+    background-color: rgb(${colors.lightGrey});
     font-family: Roboto, sans-serif;
     font-weight: 300;
     font-size: ${fonts.medium};

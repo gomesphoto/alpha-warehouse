@@ -6,8 +6,8 @@ import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly';
 import ReduxThunk from 'redux-thunk';
 import ReduxReset from './libraries/redux-reset';
 import reducers from './redux';
-import Login from './login';
-import Dashboard from './dashboard';
+import Login from './pages/Login';
+import Dashboard from './pages/Dashboard';
 import { getSessionStatus } from './helpers/utilities';
 
 const store = createStore(reducers,
@@ -18,7 +18,7 @@ const Root = () => (
   <Provider store={store}>
     <BrowserRouter>
       <Switch>
-        <Route exact path="/" render={() => <Redirect to="/login" />} />
+        <Route exact path="/" render={() => <Redirect to="/get-started" />} />
         <Route
           exact
           path="/:route"

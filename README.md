@@ -1,5 +1,5 @@
-#ALPHA WAREHOUSE
+# ALPHA WAREHOUSE
 
 The Next Generation Order Fulfilment WebApp
 
-* Built from create-react-app boilerplate *
+*Built from create-react-app boilerplate*

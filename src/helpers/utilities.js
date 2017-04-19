@@ -1,19 +1,22 @@
 /**
  * @desc create authenticated user session
+ * @param  {String} [uid='']
  * @param  {String} [email='']
+ * @param  {String} [profile='']
  * @param  {Date} [expires=Date.now()]
- * @param  {Array} profile
  * @return {Session}
  */
 export const setSession = (
+  uid = '',
   email = '',
+  displayName: '',
   expires = Date.now(),
-  profile: [],
   ) => {
   const session = {
+    uid,
     email,
+    displayName,
     expires,
-    profile
   };
   localStorage.setItem('ALPHA_SESSION', JSON.stringify(session));
 };
@@ -36,7 +39,6 @@ export const updateProfile = (profile = []) => {
   const newSession = { ...getSession(), profile };
   return localStorage.setItem('ALPHA_SESSION', JSON.stringify(newSession));
 };
-
 
 /**
  * @desc delete session
@@ -68,39 +70,6 @@ const refreshTimeout = (refreshTime) => {
 };
 export const clearSessionExpireWarning = () => {
   clearTimeout(timeout);
-};
-
-/**
- * @desc create onboarding user session
- * @param {String} [email='']
- * @param {Date} [expires=Date.now()]
- * @return {Void}
- */
-export const setOnboardingSession = (
-  email = '',
-  expires = Date.now(),
-) => {
-  localStorage.setItem('ALPHA_ONBOARDING_SESSION', JSON.stringify({
-    email,
-    expires,
-  }));
-};
-
-/**
- * @desc get session as an object
- * @return {Object}
- */
-export const getOnboardingSession = () => {
-  const onboardingSession = localStorage.getItem('ALPHA_ONBOARDING_SESSION');
-  return JSON.parse(onboardingSession);
-};
-
-/**
- * @desc delete session
- * @return {Void}
- */
-export const deleteOnboardingSession = () => {
-  localStorage.removeItem('ALPHA_ONBOARDING_SESSION');
 };
 
 /**

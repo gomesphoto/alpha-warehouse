@@ -15,17 +15,16 @@ export const authenticationLogin = (email, password) =>
   (dispatch) => {
     dispatch({ type: AUTHENTICATION_REQUEST });
     apiLogin(email, password)
-    .then((data) => {
-      console.log(data);
+    .then((user) => {
       setSession(
-        data.email,
+        user.uid,
+        user.email,
+        user.displayName,
         Date.now() + 300000, // 5 minutes
-        Date.now() + 3000000, // 50 minutes
-        data.profile,
       );
       dispatch({
         type: AUTHENTICATION_SUCCESS,
-        payload: getSession().profile
+        payload: getSession()
       });
       window.browserHistory.push('/dashboard');
     })
@@ -60,6 +59,7 @@ export const authenticationUpdatePassword = password => ({
 // -- Reducer --------------------------------------------------------------- //
 const INITIAL_STATE = {
   fetching: false,
+  uid: '',
   email: '',
   password: '',
   profile: []
@@ -71,9 +71,23 @@ export const authenticationReducer = (state = INITIAL_STATE, action) => {
     case AUTHENTICATION_SIGNOUT_REQUEST:
       return { ...state, fetching: true };
     case AUTHENTICATION_SUCCESS:
-      return { ...state, fetching: false, password: '', email: '', profile: action.payload || '' };
+      return {
+        ...state,
+        fetching: false,
+        password: '',
+        uid: action.payload.uid,
+        email: action.payload.email,
+        profile: action.payload.profile
+      };
     case AUTHENTICATION_SIGNOUT_SUCCESS:
-      return { ...state, fetching: false, password: '', email: '', profile: [] };
+      return {
+        ...state,
+        fetching: false,
+        password: '',
+        uid: '',
+        email: '',
+        profile: ''
+      };
     case AUTHENTICATION_FAILURE:
       return { ...state, fetching: false };
     case AUTHENTICATION_UPDATE_EMAIL:

@@ -6,7 +6,6 @@ import { deleteSession } from '../helpers/utilities';
 
 class Logout extends Component {
   componentWillMount() {
-    console.log('LOGOUT');
     this.props.authenticationLogout();
     deleteSession();
   }

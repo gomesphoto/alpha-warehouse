@@ -19,7 +19,7 @@ const StyledForm = styled(Form)`
   border-radius: 10px;
 `;
 
-const StyledAppLogo = styled.img`
+const StyledLogo = styled.img`
   width: 90%;
 `;
 
@@ -31,13 +31,13 @@ class Login extends Component {
     return (
       <div>
         <Link to="/">
-          <StyledAppLogo src={logo} alt="Alpha Warehouse" />
+          <StyledLogo src={logo} alt="Alpha Warehouse" />
         </Link>
         <Page fetching={this.props.fetching}>
           <StyledForm onSubmit={this.onSubmit}>
             <Input label="Email" type="email" onValueChange={value => this.props.authenticationUpdateEmail(value)} />
             <Input label="Password" type="password" onValueChange={value => this.props.authenticationUpdatePassword(value)} />
-            <Button type="submit" text="Login" fetching={this.props.fetching} />
+            <Button type="submit" text="Login" round />
           </StyledForm>
         </Page>
       </div>

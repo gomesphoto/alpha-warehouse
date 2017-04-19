@@ -9,10 +9,10 @@ const StyledButton = styled.button`
   border-style: none;
   box-sizing: border-box;
   border: 1px solid rgb(${colors.dark});
-  background-color: ${({ line }) => line ? `rgb(${colors.white})` : `rgb(${colors.dark})`};
-  color: ${({ line }) => line ? `rgb(${colors.dark})` : `rgb(${colors.white})`};
+  background-color: ${({ outline, white }) => (outline || white) ? `rgb(${colors.white})` : `rgb(${colors.dark})`};
+  color: ${({ outline, white }) => (outline || white) ? `rgb(${colors.dark})` : `rgb(${colors.white})`};
+  border-radius: ${({ round }) => round ? '23px' : '0'};
   font-size: ${fonts.medium};
-  border-radius: 23px;
   font-weight: 500;
   padding: 10px;
   margin: 5px;
@@ -25,19 +25,23 @@ const StyledButton = styled.button`
   }
 `;
 
-const Button = ({ text, line, ...otherProps }) => (
-  <StyledButton line={line} {...otherProps}>
+const Button = ({ text, outline, white, round, ...otherProps }) => (
+  <StyledButton outline={outline} white={white} round={round} {...otherProps}>
     {text}
   </StyledButton>
 );
 
 Button.propTypes = {
   text: PropTypes.string.isRequired,
-  line: PropTypes.bool
+  outline: PropTypes.bool,
+  white: PropTypes.bool,
+  round: PropTypes.bool
 };
 
 Button.defaultProps = {
-  line: false
+  outline: false,
+  white: false,
+  round: false
 };
 
 export default Button;

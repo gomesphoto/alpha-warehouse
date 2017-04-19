@@ -1,58 +1,26 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import { Route, Switch, Redirect } from 'react-router-dom';
-import Login from './pages/Login';
+import Welcome from './pages/Welcome';
 import Dashboard from './pages/Dashboard';
-import { getSessionStatus } from './helpers/utilities';
-import FadeIn from './components/FadeIn';
-import Column from './components/Column';
-
-const StyledWrapper = styled(FadeIn)`
-  height: 100vh;
-  width: 100vw;
-  text-align: center;
-`;
 
 class Router extends Component {
   componentDidMount() {
-    window.browserHistory = this.props.browserHistory;
+    window.rogueDispatch = this.context.store.dispatch;
+    window.browserHistory = this.context.router.history;
   }
   render = () => (
     <Switch>
-      <StyledWrapper>
-        <Column>
-          <Route
-            exact
-            path="/:route"
-            render={(routerProps) => {
-              const path = routerProps.location.pathname;
-              console.log(getSessionStatus());
-              if (getSessionStatus() === 'LOGIN' && path !== '/logout') return (<Redirect to="/dashboard" />);
-              if (getSessionStatus() === 'LOGOUT' && path !== '/logout') return (<Redirect to="/logout" />);
-              return (<Login {...routerProps} />);
-            }}
-          />
-
-          <Route
-            exact
-            path="/dashboard"
-            render={(routerProps) => {
-              const path = routerProps.location.pathname;
-              console.log(getSessionStatus());
-              if (getSessionStatus() === 'LOGOUT' && path !== '/logout') return (<Redirect to="/logout" />);
-              return (<Dashboard {...routerProps} />);
-            }}
-          />
-        </Column>
-      </StyledWrapper>
+      <Route exact path="/" render={() => <Redirect to="/login" />} />
+      <Route exact path="/dashboard" component={Dashboard} />
+      <Route exact path="/:route" component={Welcome} />
     </Switch>
   );
 }
 
-Router.propTypes = {
-  browserHistory: PropTypes.object.isRequired
+Router.contextTypes = {
+  router: PropTypes.object.isRequired,
+  store: PropTypes.object.isRequired
 };
-
 
 export default Router;

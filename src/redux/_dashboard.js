@@ -1,5 +1,4 @@
 import { apiGetOrders } from '../helpers/api';
-import { convertCsvToJson } from '../helpers/utilities';
 
 // -- Constants ------------------------------------------------------------- //
 const DASHBOARD_GET_ORDERS_REQUEST = 'dashboard/DASHBOARD_GET_ORDERS_REQUEST';
@@ -26,20 +25,8 @@ export const dashboardGetOrders = () =>
     });
   };
 
-export const dashboardImportFile = file =>
-  (dispatch) => {
-    dispatch({ type: DASHBOARD_IMPORT_FILE_REQUEST });
-    convertCsvToJson()
-    .then((json) => {
-      dispatch({
-        type: DASHBOARD_IMPORT_FILE_SUCCESS,
-        payload: json.orders
-      });
-    })
-    .catch((error) => {
-      dispatch({ type: DASHBOARD_IMPORT_FILE_FAILURE });
-    });
-  };
+export const dashboardImportFile = () =>
+  ({ type: DASHBOARD_IMPORT_FILE_REQUEST });
 
 export const dashboardUpdateSearchQuery = ({ target }) => ({
   type: DASHBOARD_UPDATE_QUERY,
@@ -52,7 +39,8 @@ const INITIAL_STATE = {
   fetching: false,
   importFetching: false,
   orders: [],
-  query: ''
+  query: '',
+  modalShow: false
 };
 
 export const dashboardReducer = (state = INITIAL_STATE, action) => {
@@ -75,7 +63,8 @@ export const dashboardReducer = (state = INITIAL_STATE, action) => {
     case DASHBOARD_IMPORT_FILE_REQUEST:
       return {
         ...state,
-        importFetching: true
+        importFetching: true,
+        modalShow: true
       };
     case DASHBOARD_IMPORT_FILE_SUCCESS:
       return {

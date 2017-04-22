@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
+import Modal from '../components/Modal';
 import FadeIn from '../components/FadeIn';
 import Button from '../components/Button';
 import inverseLogo from '../assets/alpha-warehouse-inverse.svg';
 import { colors, fonts } from '../styles';
 import { dashboardGetOrders, dashboardImportFile, dashboardUpdateSearchQuery } from '../redux/_dashboard';
-
 
 const StyledWrapper = styled(FadeIn)`
   height: 100vh;
@@ -63,8 +63,9 @@ class Dashboard extends Component {
   componentDidMount() {
     this.props.dashboardGetOrders();
   }
-  importFileCSV({ target }) {
-    this.props.dashboardImportFile(target.value);
+
+  importFileCSV = () => {
+    this.props.dashboardImportFile();
   }
   render() {
     return (
@@ -78,6 +79,7 @@ class Dashboard extends Component {
             <StyledButton white text="Import CSV" onClick={this.importFileCSV} />
           </BaseHeader>
         </BaseLayout>
+        <Modal show={this.props.modalShow} />
       </StyledWrapper>
     );
   }
@@ -86,14 +88,16 @@ class Dashboard extends Component {
 Dashboard.propTypes = {
   dashboardGetOrders: PropTypes.func.isRequired,
   dashboardImportFile: PropTypes.func.isRequired,
-  dashboardUpdateSearchQuery: PropTypes.func.isRequired
+  dashboardUpdateSearchQuery: PropTypes.func.isRequired,
+  modalShow: PropTypes.bool.isRequired
 };
 
 const reduxProps = ({ dashboard }) => ({
   fetching: dashboard.fetching,
   importFetching: dashboard.importFetching,
   orders: dashboard.orders,
-  query: dashboard.query
+  query: dashboard.query,
+  modalShow: dashboard.modalShow
 });
 
 export default connect(reduxProps, {

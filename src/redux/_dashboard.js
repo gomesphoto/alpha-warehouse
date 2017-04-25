@@ -5,9 +5,7 @@ const DASHBOARD_GET_ORDERS_REQUEST = 'dashboard/DASHBOARD_GET_ORDERS_REQUEST';
 const DASHBOARD_GET_ORDERS_SUCCESS = 'dashboard/DASHBOARD_GET_ORDERS_SUCCESS';
 const DASHBOARD_GET_ORDERS_FAILURE = 'dashboard/DASHBOARD_GET_ORDERS_FAILURE';
 const DASHBOARD_UPDATE_QUERY = 'dashboard/DASHBOARD_UPDATE_QUERY';
-const DASHBOARD_IMPORT_FILE_REQUEST = 'dashboard/DASHBOARD_IMPORT_FILE_REQUEST';
-const DASHBOARD_IMPORT_FILE_SUCCESS = 'dashboard/DASHBOARD_IMPORT_FILE_SUCCESS';
-const DASHBOARD_IMPORT_FILE_FAILURE = 'dashboard/DASHBOARD_IMPORT_FILE_FAILURE';
+const DASHBOARD_IMPORT_FILE = 'dashboard/DASHBOARD_IMPORT_FILE';
 
 // -- Actions --------------------------------------------------------------- //
 export const dashboardGetOrders = () =>
@@ -25,8 +23,15 @@ export const dashboardGetOrders = () =>
     });
   };
 
-export const dashboardImportFile = () =>
-  ({ type: DASHBOARD_IMPORT_FILE_REQUEST });
+export const dashboardImportFile = arrayBuffer =>
+  (dispatch) => {
+    const objectKeys = arrayBuffer.shift();
+    function order(details) {
+      details.map((detail, idx) => this[objectKeys[idx]] = detail);
+    }
+    const jsonFile = arrayBuffer.map((x, idx) => new order(x));
+    dispatch({ type: DASHBOARD_IMPORT_FILE, payload: jsonFile });
+  };
 
 export const dashboardUpdateSearchQuery = ({ target }) => ({
   type: DASHBOARD_UPDATE_QUERY,
@@ -37,7 +42,6 @@ export const dashboardUpdateSearchQuery = ({ target }) => ({
 // -- Reducer --------------------------------------------------------------- //
 const INITIAL_STATE = {
   fetching: false,
-  importFetching: false,
   orders: [],
   query: '',
   modalShow: false
@@ -60,20 +64,8 @@ export const dashboardReducer = (state = INITIAL_STATE, action) => {
       return { ...state, fetching: false };
     case DASHBOARD_UPDATE_QUERY:
       return { ...state, email: action.payload };
-    case DASHBOARD_IMPORT_FILE_REQUEST:
-      return {
-        ...state,
-        importFetching: true,
-        modalShow: true
-      };
-    case DASHBOARD_IMPORT_FILE_SUCCESS:
-      return {
-        ...state,
-        importFetching: false,
-        orders: [...state.orders, action.payload]
-      };
-    case DASHBOARD_IMPORT_FILE_FAILURE:
-      return { ...state, importFetching: false };
+    case DASHBOARD_IMPORT_FILE:
+      return { ...state, orders: action.payload };
     default:
       return state;
   }

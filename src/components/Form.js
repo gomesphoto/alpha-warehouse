@@ -17,11 +17,14 @@ class Form extends Component {
     this.props.onSubmit(event);
   };
 
-  render = () => (
-    <StyledForm onSubmit={this.onSubmitForm}>
-      {this.props.children}
-    </StyledForm>
-  )
+  render = () => {
+    const { children, ...otherProps } = this.props;
+    return (
+      <StyledForm {...otherProps} onSubmit={this.onSubmitForm}>
+        {children}
+      </StyledForm>
+    );
+  }
 }
 
 Form.propTypes = {

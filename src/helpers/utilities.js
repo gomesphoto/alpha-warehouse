@@ -9,7 +9,7 @@
 export const setSession = (
   uid = '',
   email = '',
-  displayName: '',
+  displayName = '',
   expires = Date.now(),
   ) => {
   const session = {

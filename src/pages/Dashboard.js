@@ -7,7 +7,8 @@ import FadeIn from '../components/FadeIn';
 import Button from '../components/Button';
 import inverseLogo from '../assets/alpha-warehouse-inverse.svg';
 import { colors, fonts } from '../styles';
-import { dashboardGetOrders, dashboardImportFile, dashboardUpdateSearchQuery } from '../redux/_dashboard';
+import { dashboardImportFile, dashboardUpdateSearchQuery } from '../redux/_dashboard';
+import CSVToArray from '../libraries/csvtoarray';
 
 const StyledWrapper = styled(FadeIn)`
   height: 100vh;
@@ -59,13 +60,20 @@ const StyledButton = styled(Button)`
   font-size: ${fonts.small};
 `;
 
-class Dashboard extends Component {
-  componentDidMount() {
-    this.props.dashboardGetOrders();
-  }
+const StyledInputFile = styled.input`
+  display: none;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+`;
 
-  importFileCSV = () => {
-    this.props.dashboardImportFile();
+class Dashboard extends Component {
+  toggleUpload = () => this.fileInput.click(({ target }) => target.value);
+  convertCSVtoJSON = () => {
+    const file = this.fileInput.files[0];
+    const reader = new FileReader();
+    reader.onload = ({ target }) => this.props.dashboardImportFile(CSVToArray(target.result));
+    reader.readAsText(file);
   }
   render() {
     return (
@@ -76,7 +84,8 @@ class Dashboard extends Component {
               <StyledInverseLogo src={inverseLogo} alt="Alpha Warehouse" />
             </StyledImgWrapper>
             <StyledInput onChange={this.props.dashboardUpdateSearchQuery} />
-            <StyledButton white text="Import CSV" onClick={this.importFileCSV} />
+            <StyledInputFile type="file" accept=".csv" onChange={this.convertCSVtoJSON} innerRef={c => this.fileInput = c} />
+            <StyledButton type="submit" white text="Import CSV" onClick={this.toggleUpload} />
           </BaseHeader>
         </BaseLayout>
         <Modal show={this.props.modalShow} />
@@ -86,7 +95,6 @@ class Dashboard extends Component {
 }
 
 Dashboard.propTypes = {
-  dashboardGetOrders: PropTypes.func.isRequired,
   dashboardImportFile: PropTypes.func.isRequired,
   dashboardUpdateSearchQuery: PropTypes.func.isRequired,
   modalShow: PropTypes.bool.isRequired
@@ -101,7 +109,6 @@ const reduxProps = ({ dashboard }) => ({
 });
 
 export default connect(reduxProps, {
-  dashboardGetOrders,
   dashboardImportFile,
   dashboardUpdateSearchQuery
 })(Dashboard);

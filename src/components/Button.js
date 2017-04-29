@@ -8,20 +8,23 @@ const StyledButton = styled.button`
   border: none;
   border-style: none;
   box-sizing: border-box;
-  border: 1px solid rgb(${colors.dark});
+  border: ${({ outline }) => (outline) ? `1px solid rgb(${colors.dark})` : 'none'};
   background-color: ${({ outline, white }) => (outline || white) ? `rgb(${colors.white})` : `rgb(${colors.dark})`};
   color: ${({ outline, white }) => (outline || white) ? `rgb(${colors.dark})` : `rgb(${colors.white})`};
-  border-radius: ${({ round }) => round ? '23px' : '0'};
+  border-radius: ${({ round }) => round ? '24px' : '2px'};
   font-size: ${fonts.medium};
-  font-weight: 500;
+  font-weight: 400;
   padding: 10px;
-  margin: 5px;
+  margin: 5px auto;
   width: 150px;
   height: 36px;
   cursor: pointer;
   will-change: transform;
-  &:hover {
-    transform: scale(1.02);
+
+  @media (hover: hover) {
+    &:hover {
+      transform: scale(1.02);
+    }
   }
 `;
 
@@ -32,13 +35,14 @@ const Button = ({ text, outline, white, round, ...otherProps }) => (
 );
 
 Button.propTypes = {
-  text: PropTypes.string.isRequired,
+  text: PropTypes.string,
   outline: PropTypes.bool,
   white: PropTypes.bool,
   round: PropTypes.bool
 };
 
 Button.defaultProps = {
+  text: '',
   outline: false,
   white: false,
   round: false

@@ -18,6 +18,9 @@ const StyledModal = styled.div`
   opacity: ${({ show }) => show ? 1 : 0};
   visibility: ${({ show }) => show ? 'visible' : 'hidden'};
   pointer-events: ${({ show }) => show ? 'auto' : 'none'};
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const StyledCard = styled.div`

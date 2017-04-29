@@ -14,8 +14,8 @@ const AUTHENTICATION_UPDATE_PASSWORD = 'authentication/AUTHENTICATION_UPDATE_PAS
 export const authenticationLogin = (email, password) =>
   (dispatch) => {
     dispatch({ type: AUTHENTICATION_REQUEST });
-    apiLogin(email, password)
-    .then((user) => {
+    const authHandler = (error, user) => {
+      if (error) return dispatch({ type: AUTHENTICATION_FAILURE });
       setSession(
         user.uid,
         user.email,
@@ -27,10 +27,8 @@ export const authenticationLogin = (email, password) =>
         payload: getSession()
       });
       window.browserHistory.push('/dashboard');
-    })
-    .catch((error) => {
-      dispatch({ type: AUTHENTICATION_FAILURE });
-    });
+    };
+    apiLogin(email, password, authHandler);
   };
 
 export const authenticationLogout = () =>

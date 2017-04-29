@@ -1,4 +1,5 @@
 import { apiGetOrders } from '../helpers/api';
+import { camelize } from '../helpers/utilities';
 
 // -- Constants ------------------------------------------------------------- //
 const DASHBOARD_GET_ORDERS_REQUEST = 'dashboard/DASHBOARD_GET_ORDERS_REQUEST';
@@ -6,6 +7,7 @@ const DASHBOARD_GET_ORDERS_SUCCESS = 'dashboard/DASHBOARD_GET_ORDERS_SUCCESS';
 const DASHBOARD_GET_ORDERS_FAILURE = 'dashboard/DASHBOARD_GET_ORDERS_FAILURE';
 const DASHBOARD_UPDATE_QUERY = 'dashboard/DASHBOARD_UPDATE_QUERY';
 const DASHBOARD_IMPORT_FILE = 'dashboard/DASHBOARD_IMPORT_FILE';
+const DASHBOARD_TOGGLE_MODAL = 'dashboard/DASHBOARD_TOGGLE_MODAL';
 
 // -- Actions --------------------------------------------------------------- //
 export const dashboardGetOrders = () =>
@@ -25,11 +27,26 @@ export const dashboardGetOrders = () =>
 
 export const dashboardImportFile = arrayBuffer =>
   (dispatch) => {
-    const objectKeys = arrayBuffer.shift();
+    const objectKeys = arrayBuffer
+      .shift()
+      .map((key) => {
+        if (key.includes('Lineitem')) key = key.replace('Lineitem', 'Item');
+        return camelize(key);
+      });
+    arrayBuffer.pop();
     function order(details) {
       details.map((detail, idx) => this[objectKeys[idx]] = detail);
     }
-    const jsonFile = arrayBuffer.map((x, idx) => new order(x));
+    let jsonFile = arrayBuffer.map((x, idx) => new order(x));
+    jsonFile = jsonFile.map((x, idx, arr) => {
+      if (!x.email) {
+        Object.keys(x).map((key) => {
+          if (!x[key]) x[key] = arr[idx - 1][key];
+          return key;
+        });
+      }
+      return x;
+    });
     dispatch({ type: DASHBOARD_IMPORT_FILE, payload: jsonFile });
   };
 
@@ -37,6 +54,9 @@ export const dashboardUpdateSearchQuery = ({ target }) => ({
   type: DASHBOARD_UPDATE_QUERY,
   payload: target.value
 });
+
+export const dashboardToggleModal = () =>
+  ({ type: DASHBOARD_TOGGLE_MODAL });
 
 
 // -- Reducer --------------------------------------------------------------- //
@@ -66,6 +86,8 @@ export const dashboardReducer = (state = INITIAL_STATE, action) => {
       return { ...state, email: action.payload };
     case DASHBOARD_IMPORT_FILE:
       return { ...state, orders: action.payload };
+    case DASHBOARD_TOGGLE_MODAL:
+      return { ...state, modalShow: !state.modalShow };
     default:
       return state;
   }

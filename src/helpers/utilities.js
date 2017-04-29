@@ -94,6 +94,20 @@ export const refreshSession = () => {
 };
 
 /**
+ * @desc returns order status
+ * @param {Object} order
+ * @return {String}
+ */
+export const getOrderStatus = (order) => {
+  if (order.fulfillmentStatus === 'FULFILLED') {
+    return 'Fulfilled';
+  } else if (order.financialStatus === 'PAID') {
+    return 'Paid';
+  }
+  return 'Incomplete';
+};
+
+/**
  * @desc detects mobile devices
  * @return {Boolean}
  */
@@ -101,3 +115,56 @@ export const isMobile = () => {
   if ('ontouchstart' in window && Math.max(document.documentElement.clientWidth, window.innerWidth || 0) <= 800) return true;
   return false;
 };
+
+/**
+ * @desc returns currency symbol
+ * @param {String} currency
+ * @return {String}
+ */
+export const getCurrencySymbol = (currency) => {
+  switch (currency.toUpperCase()) {
+    case 'GBP':
+      return '£';
+    case 'EUR':
+      return '€';
+    case 'USD':
+      return '$';
+    default:
+      return '£';
+  }
+};
+
+/**
+ * @desc parse customer names
+ * @param {String} name
+ * @return {String}
+ */
+export const parseName = (name) => {
+  const holder = name.split(' ');
+  const result = holder.map((x, idx, arr) =>
+    (idx === 0 || idx === arr.length - 1)
+    ? x.charAt(0).toUpperCase() + x.slice(1).toLowerCase()
+    : ''
+  );
+  const string = result.join(' ');
+  return string;
+};
+
+/**
+ * @desc return ellipsed text
+ * @param  {String} [text='']
+ * @param  {String} [maxLength=text.length]
+ * @return {String}
+ */
+export const ellipseText = (text = '', maxLength = false, noEllipse = false) =>
+  (maxLength && text.length > maxLength) ? `${text.substring(0, maxLength)}${(noEllipse) ? '' : '...'}` : text;
+
+/**
+ * @desc turns any string into camelcase
+ * @param {string} str
+ * @return {string}
+ */
+export const camelize = str =>
+  str.replace(/(?:^\w|[A-Z]|\b\w)/g, (letter, index) =>
+    index === 0 ? letter.toLowerCase() : letter.toUpperCase()
+  ).replace(/\s+/g, '');

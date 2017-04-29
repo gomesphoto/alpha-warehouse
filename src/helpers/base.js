@@ -1,4 +1,4 @@
-import firebase from 'firebase';
+import Rebase from 're-base';
 
 const config = {
   apiKey: 'AIzaSyA63syzbGPrNuVvzQTLPHTK6sIMWXCbNzY',
@@ -9,7 +9,6 @@ const config = {
   messagingSenderId: '792228833800'
 };
 
-firebase.initializeApp(config);
+const base = Rebase.createClass(config, 'alpha-warehouse');
 
-export const database = firebase.database();
-export const defaultAuth = firebase.auth();
+export default base;

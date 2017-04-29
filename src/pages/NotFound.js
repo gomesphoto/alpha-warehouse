@@ -1,13 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Page from '../components/Page';
+import Wrapper from '../components/Wrapper';
 import Column from '../components/Column';
 
 const NotFound = () => (
-  <Page>
+  <Wrapper>
     <Column>
       <Link to="/"><h1>404 Page Not Found</h1></Link>
     </Column>
-  </Page>
+  </Wrapper>
 );
 export default NotFound;

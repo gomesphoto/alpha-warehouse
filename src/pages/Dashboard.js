@@ -1,13 +1,19 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import Modal from '../components/Modal';
 import FadeIn from '../components/FadeIn';
 import Button from '../components/Button';
+import Form from '../components/Form';
+import PlusButton from '../components/PlusButton';
+import searchIcon from '../assets/search.svg';
+import CircleButton from '../components/CircleButton';
 import inverseLogo from '../assets/alpha-warehouse-inverse.svg';
-import { colors, fonts } from '../styles';
-import { dashboardImportFile, dashboardUpdateSearchQuery } from '../redux/_dashboard';
+import { colors, fonts, responsive } from '../styles';
+import { getOrderStatus, ellipseText, parseName, getCurrencySymbol } from '../helpers/utilities';
+import { dashboardImportFile, dashboardUpdateSearchQuery, dashboardToggleModal } from '../redux/_dashboard';
 import CSVToArray from '../libraries/csvtoarray';
 
 const StyledWrapper = styled(FadeIn)`
@@ -26,14 +32,28 @@ const BaseLayout = styled.div`
 const BaseHeader = styled.div`
   background-color: rgb(${colors.black});
   min-height: 30px;
+  padding: 5px 10px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+`;
+
+const StyledForm = styled(Form)`
+  display: flex;
+  position: relative;
+  margin: 5px;
+  padding: 0;
+  padding-left: 20px;
+  width: 60%;
+  @media (${responsive.sm.max}) {
+    width: 45%;
+  }
 `;
 
 const StyledImgWrapper = styled.div`
-  width: 15%;
+  width: 18%;
   height: 100%;
-  min-width: 100px;
+  min-width: 120px;
   min-height: 30px;
   display: flex;
   align-items: center;
@@ -42,22 +62,53 @@ const StyledImgWrapper = styled.div`
 
 const StyledInverseLogo = styled.img`
   width: 100%;
-  margin-top: 2%;
+  margin-top: 4%;
 `;
 
 const StyledInput = styled.input`
+  padding: 5px;
+  width: 100%;
+  padding-left: 24px;
+  line-height: 1.2;
+  font-size: ${fonts.small};
   background: transparent;
-  margin: 5px;
-  width: 50%;
-  border: 1px solid rgb(${colors.white});
   color: rgb(${colors.white});
+  border: 1px solid rgb(${colors.white});
+`;
+
+const StyledSelect = styled.select`
+  -webkit-appearance: none;
+  border: none;
+  border-radius: 0;
+  width: 85px;
+  height: 26px;
+  font-size: 12px;
+  line-height: 1.2;
+  padding: 5px 0 5px 15px;
+  left: 0;
+  text-align: center;
+  outline: none;
+`;
+
+const StyledIcon = styled.img`
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 3px;
+  left: 100px;
 `;
 
 const StyledButton = styled(Button)`
-  padding: 0;
+  padding: 5px;
+  margin: 5px;
   min-width: 10%;
-  height: 20px;
+  max-width: 100px;
+  height: 26px;
   font-size: ${fonts.small};
+`;
+
+const StyledPlusButton = styled(PlusButton)`
+  margin-right: 20px;
 `;
 
 const StyledInputFile = styled.input`
@@ -67,14 +118,88 @@ const StyledInputFile = styled.input`
   visibility: hidden;
 `;
 
+const BaseTable = styled.div`
+  width: 100%;
+  font-size: ${fonts.small};
+  color: rgb(${colors.dark});
+`;
+
+const StyledRow = styled.div`
+  width: 100%;
+  height: 45px;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+  border-bottom: 1px solid #222;
+  padding: 5px 0;
+  &:hover {
+    background-color: rgba(${colors.lightGrey}, 0.7);
+  }
+`;
+
+const StyledTableHeader = styled(StyledRow)`
+  background: rgb(${colors.lightGrey});
+  & td {
+    font-size: ${fonts.medium};
+    font-weight: 400;
+  }
+`;
+
+const StyledTableBody = styled.div`
+  width: 100%;
+  height: calc(100vh - 140px);
+  position: relative;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: scroll;
+`;
+
+const StyledColumn = styled.div`
+  display: flex;
+  text-align: left !important;
+  justify-content: flex-start;
+  align-items: center;
+  flex-grow: ${({ flex }) => flex || 'inherit'};
+  padding: ${({ noPadding }) => noPadding ? 'none' : '5px 10px'};
+  width: ${({ width }) => `${width}%` || 'auto'};
+  font-size: ${({ bold }) => bold ? fonts.medium : 'inherit'};
+  font-weight: ${({ bold }) => bold ? 500 : 'inherit'};
+`;
+
 class Dashboard extends Component {
+
   toggleUpload = () => this.fileInput.click(({ target }) => target.value);
+
   convertCSVtoJSON = () => {
     const file = this.fileInput.files[0];
     const reader = new FileReader();
     reader.onload = ({ target }) => this.props.dashboardImportFile(CSVToArray(target.result));
     reader.readAsText(file);
   }
+
+  renderTable = (orders) => {
+    let lastOrderID = null;
+    const render = orders.map((order) => {
+      if (lastOrderID === order.orderID) return null;
+      lastOrderID = order.orderID;
+      return (
+        <StyledRow id={order.orderID}>
+          <StyledColumn width={6} noPadding><CircleButton /></StyledColumn>
+          <StyledColumn bold width={10}>{`#${order.orderID}`}</StyledColumn>
+          <StyledColumn width={12}>{moment(order.createdAt).format('DD/MM/YYYY')}</StyledColumn>
+          <StyledColumn width={14}>{parseName(order.shippingName)}</StyledColumn>
+          <StyledColumn width={40}>{`${ellipseText(order.shippingAddress1, 12, true)} ${order.shippingCity} ${order.shippingZip} ${order.shippingCountry}`}</StyledColumn>
+          <StyledColumn width={8}>{`${getCurrencySymbol(order.currency)} ${order.total}`}</StyledColumn>
+          <StyledColumn width={10}>{getOrderStatus(order)}</StyledColumn>
+        </StyledRow>
+      );
+    });
+    return render;
+  }
+
   render() {
     return (
       <StyledWrapper>
@@ -83,10 +208,34 @@ class Dashboard extends Component {
             <StyledImgWrapper>
               <StyledInverseLogo src={inverseLogo} alt="Alpha Warehouse" />
             </StyledImgWrapper>
-            <StyledInput onChange={this.props.dashboardUpdateSearchQuery} />
+            <StyledForm>
+              <StyledSelect>
+                <option value="item">Item</option>
+                <option value="status">Status</option>
+                <option value="name">Name</option>
+                <option value="address">Address</option>
+              </StyledSelect>
+              <StyledIcon src={searchIcon} />
+              <StyledInput placeholder="Search Orders" onChange={this.props.dashboardUpdateSearchQuery} />
+            </StyledForm>
             <StyledInputFile type="file" accept=".csv" onChange={this.convertCSVtoJSON} innerRef={c => this.fileInput = c} />
+            <StyledPlusButton white onClick={this.props.dashboardToggleModal} />
             <StyledButton type="submit" white text="Import CSV" onClick={this.toggleUpload} />
           </BaseHeader>
+          <BaseTable border="0" cellspacing="0" cellpadding="0">
+            <StyledTableHeader>
+              <StyledColumn width={6} noPadding>{''}</StyledColumn>
+              <StyledColumn width={10}>Order ID</StyledColumn>
+              <StyledColumn width={12}>Date</StyledColumn>
+              <StyledColumn width={14}>Customer Name</StyledColumn>
+              <StyledColumn width={40}>Customer Address</StyledColumn>
+              <StyledColumn width={8}>Total</StyledColumn>
+              <StyledColumn width={10}>Status</StyledColumn>
+            </StyledTableHeader>
+            <StyledTableBody>
+              {this.renderTable(this.props.orders)}
+            </StyledTableBody>
+          </BaseTable>
         </BaseLayout>
         <Modal show={this.props.modalShow} />
       </StyledWrapper>
@@ -97,7 +246,9 @@ class Dashboard extends Component {
 Dashboard.propTypes = {
   dashboardImportFile: PropTypes.func.isRequired,
   dashboardUpdateSearchQuery: PropTypes.func.isRequired,
-  modalShow: PropTypes.bool.isRequired
+  dashboardToggleModal: PropTypes.func.isRequired,
+  modalShow: PropTypes.bool.isRequired,
+  orders: PropTypes.array.isRequired
 };
 
 const reduxProps = ({ dashboard }) => ({
@@ -110,5 +261,6 @@ const reduxProps = ({ dashboard }) => ({
 
 export default connect(reduxProps, {
   dashboardImportFile,
-  dashboardUpdateSearchQuery
+  dashboardUpdateSearchQuery,
+  dashboardToggleModal
 })(Dashboard);

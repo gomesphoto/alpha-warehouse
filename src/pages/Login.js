@@ -5,18 +5,13 @@ import styled from 'styled-components';
 import Link from '../components/Link';
 import Input from '../components/Input';
 import Button from '../components/Button';
-import Page from '../components/Page';
+import Wrapper from '../components/Wrapper';
 import Form from '../components/Form';
 import logo from '../assets/alpha-warehouse.svg';
 import { authenticationLogin, authenticationUpdateEmail, authenticationUpdatePassword } from '../redux/_authentication';
 
 const StyledForm = styled(Form)`
-  border: 1px solid white;
-  margin-top: 60px;
   padding: 25px;
-  margin: 60px auto 0;
-  box-sizing: border-box;
-  border-radius: 10px;
 `;
 
 const StyledLogo = styled.img`
@@ -33,13 +28,13 @@ class Login extends Component {
         <Link to="/">
           <StyledLogo src={logo} alt="Alpha Warehouse" />
         </Link>
-        <Page fetching={this.props.fetching}>
+        <Wrapper fetching={this.props.fetching}>
           <StyledForm onSubmit={this.onSubmit}>
             <Input label="Email" type="email" onValueChange={value => this.props.authenticationUpdateEmail(value)} />
             <Input label="Password" type="password" onValueChange={value => this.props.authenticationUpdatePassword(value)} />
             <Button type="submit" text="Login" round />
           </StyledForm>
-        </Page>
+        </Wrapper>
       </div>
     );
   }

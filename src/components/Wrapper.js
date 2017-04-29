@@ -1,9 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Loader from '../components/Loader';
+import styled from 'styled-components';
+import FadeIn from './FadeIn';
+import Loader from './Loader';
+
+const StyledWrapper = styled(FadeIn)`
+  min-height: 210px;
+  display: flex;
+  align-items: center;
+`;
 
 const Wrapper = ({ children, fetching }) => (
-  <div>{fetching ? <Loader /> : children} </div>
+  <StyledWrapper>{fetching ? <Loader /> : children} </StyledWrapper>
 );
 
 Wrapper.propTypes = {

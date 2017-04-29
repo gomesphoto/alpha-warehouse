@@ -14,7 +14,7 @@ const load = keyframes`
 const StyledLoader = styled.div`
   position: relative;
   font-size: 10px;
-  margin: 50px auto;
+  margin: 0 auto;
   text-indent: -9999em;
   width: 8em;
   height: 8em;
@@ -36,7 +36,7 @@ const StyledLoader = styled.div`
   }
 
   &:after {
-    background: rgb(${colors.white});
+    background: rgb(${colors.lightGrey});
     width: 75%;
     height: 75%;
     border-radius: 50%;

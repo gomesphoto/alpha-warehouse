@@ -31,6 +31,10 @@ export const dashboardImportFile = arrayBuffer =>
       .shift()
       .map((key) => {
         if (key.includes('Lineitem')) key = key.replace('Lineitem', 'Item');
+        if (key.includes('Shipping Zip')) key = key.replace('Shipping Zip', 'Shipping Postal Code');
+        if (key.includes('Shipping Province')) key = key.replace('Shipping Province', 'Shipping State');
+        if (key.includes('Billing Zip')) key = key.replace('Billing Zip', 'Billing Postal Code');
+        if (key.includes('Billing Province')) key = key.replace('Billing Province', 'Billing State');
         return camelize(key);
       });
     arrayBuffer.pop();

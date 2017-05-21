@@ -7,6 +7,7 @@ import Modal from '../components/Modal';
 import FadeIn from '../components/FadeIn';
 import Button from '../components/Button';
 import Form from '../components/Form';
+import Select from '../components/Select';
 import PlusButton from '../components/PlusButton';
 import searchIcon from '../assets/search.svg';
 import CircleButton from '../components/CircleButton';
@@ -50,6 +51,11 @@ const StyledForm = styled(Form)`
   }
 `;
 
+const StyledSearchWrapper = styled.div`
+  position: relative;
+  width: 100%;
+`;
+
 const StyledImgWrapper = styled.div`
   width: 18%;
   height: 100%;
@@ -76,18 +82,9 @@ const StyledInput = styled.input`
   border: 1px solid rgb(${colors.white});
 `;
 
-const StyledSelect = styled.select`
-  -webkit-appearance: none;
-  border: none;
-  border-radius: 0;
+const StyledSelectWrapper = styled.div`
   width: 85px;
   height: 26px;
-  font-size: 12px;
-  line-height: 1.2;
-  padding: 5px 0 5px 15px;
-  left: 0;
-  text-align: center;
-  outline: none;
 `;
 
 const StyledIcon = styled.img`
@@ -95,7 +92,7 @@ const StyledIcon = styled.img`
   height: 20px;
   position: absolute;
   top: 3px;
-  left: 100px;
+  left: 5px;
 `;
 
 const StyledButton = styled(Button)`
@@ -186,7 +183,7 @@ class Dashboard extends Component {
       if (lastOrderID === order.orderID) return null;
       lastOrderID = order.orderID;
       return (
-        <StyledRow id={order.orderID}>
+        <StyledRow key={order.orderID}>
           <StyledColumn width={6} noPadding><CircleButton /></StyledColumn>
           <StyledColumn bold width={10}>{`#${order.orderID}`}</StyledColumn>
           <StyledColumn width={12}>{moment(order.createdAt).format('DD/MM/YYYY')}</StyledColumn>
@@ -209,14 +206,13 @@ class Dashboard extends Component {
               <StyledInverseLogo src={inverseLogo} alt="Alpha Warehouse" />
             </StyledImgWrapper>
             <StyledForm>
-              <StyledSelect>
-                <option value="item">Item</option>
-                <option value="status">Status</option>
-                <option value="name">Name</option>
-                <option value="address">Address</option>
-              </StyledSelect>
-              <StyledIcon src={searchIcon} />
-              <StyledInput placeholder="Search Orders" onChange={this.props.dashboardUpdateSearchQuery} />
+              <StyledSelectWrapper>
+                <Select options={['Item', 'Status', 'Name', 'Address']} />
+              </StyledSelectWrapper>
+              <StyledSearchWrapper>
+                <StyledIcon src={searchIcon} />
+                <StyledInput placeholder="Search Orders" onChange={this.props.dashboardUpdateSearchQuery} />
+              </StyledSearchWrapper>
             </StyledForm>
             <StyledInputFile type="file" accept=".csv" onChange={this.convertCSVtoJSON} innerRef={c => this.fileInput = c} />
             <StyledPlusButton white onClick={this.props.dashboardToggleModal} />
@@ -237,7 +233,7 @@ class Dashboard extends Component {
             </StyledTableBody>
           </BaseTable>
         </BaseLayout>
-        <Modal show={this.props.modalShow} />
+        <Modal show={this.props.modalShow} toggleModal={this.props.dashboardToggleModal} />
       </StyledWrapper>
     );
   }
